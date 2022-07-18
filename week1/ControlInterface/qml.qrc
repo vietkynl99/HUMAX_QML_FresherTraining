@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MyButton.qml</file>
+        <file>MenuBar.qml</file>
+        <file>MyPicture.qml</file>
+        <file>MyCppContext.qml</file>
+        <file>AmongUs.qml</file>
+        <file>MyButtonState.qml</file>
+        <file>MiniAmongUs.qml</file>
+        <file>image/Logo.png</file>
+        <file>image/Avatar.png</file>
+        <file>image/dog.jpg</file>
+        <file>image/amongus_red.png</file>
+        <file>image/amongus_die.png</file>
+        <file>image/amongus_green.png</file>
+        <file>image/amongus_yellow.png</file>
+        <file>image/knife.png</file>
+        <file>image/meme.gif</file>
+        <file>image/cat1.gif</file>
+        <file>image/cat2.gif</file>
+        <file>image/khabanh.gif</file>
+        <file>image/amongus_run1.gif</file>
+        <file>image/amongus_run2.gif</file>
+        <file>soundeffect/amongus_sound.wav</file>
+    </qresource>
+</RCC>
