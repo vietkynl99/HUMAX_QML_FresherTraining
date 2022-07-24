@@ -35,12 +35,11 @@ Window {
     //Grid with Flickable
     Rectangle {
         id: rectGrid
-        width: height
+        width: 500
+        height: 500
         color: "#243953"
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 50
         anchors.leftMargin: 50
         anchors.topMargin: 50
 
@@ -48,7 +47,7 @@ Window {
             id: flickable
             anchors.fill: parent
             contentWidth: boxgrid.width
-            contentHeight: boxgrid.height*2
+            contentHeight: 123*Math.ceil(listModelShape.count/4)
             clip: true
             bottomMargin: 50
 
@@ -76,7 +75,9 @@ Window {
             ListModel {
                 id: listModelShape
                 objectName: "listShape"
-                //ListElement { bType: 0; bColor: "blue"; bValue: 52}
+//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
+//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
+//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
                 function addNewItem(itemVar)
                 {
                     append({ bType: itemVar.type, bColor: itemVar.color, bValue: itemVar.value})

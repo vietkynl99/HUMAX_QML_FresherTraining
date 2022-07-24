@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MyButton.qml</file>
+        <file>AddNewMember.qml</file>
+        <file>image/teamleader.jpg</file>
+        <file>image/developer.jpg</file>
+        <file>image/ba.jpg</file>
+        <file>image/tester.jpg</file>
+    </qresource>
+</RCC>

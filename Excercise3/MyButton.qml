@@ -8,7 +8,7 @@ Item {
     property string background_color: "#1B5C98"
     property string selected_color: "black"
     property string button_text: "text"
-    property string text_color: "white"
+    property string text_color: "whitesmoke"
     property int text_font: 22
     property int border_width: 0
     property string border_color: "white"
@@ -50,12 +50,12 @@ Item {
         },
         State {
             name: "moved"
-            when: btnMouse.containsMouse && !btnMouse.pressed && !button_enable
+            when: btnMouse.containsMouse && !btnMouse.pressed && button_enable
             PropertyChanges {target: btnRect; color: Qt.darker(background_color, 1.2)}      //change to darker color
         },
         State {
             name: "pressed"
-            when: btnMouse.pressed && !button_enable
+            when: btnMouse.pressed && button_enable
             PropertyChanges {target: btnRect; color: Qt.darker(background_color, 1.6); scale: 1.03}      //change to darker color
         }
     ]
