@@ -34,3 +34,5 @@ void MyLight::turnOff()
     setIsOn(false);
     qDebug() << "turnOff is called";
 }
+
+

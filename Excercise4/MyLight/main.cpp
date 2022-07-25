@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 
     // Create new instance
     MyLight myLight;
-    //    myLight.turnOn();
     engine.rootContext()->setContextProperty("myLight", &myLight);
 
 
@@ -32,11 +31,11 @@ int main(int argc, char *argv[])
     if(!connection.registerService("cong.service.light"))
     {
         qCritical() << connection.lastError().message();
-        qDebug("Cannot register DBus service, server started? dbus-daemon.exe --system --address=tcp:host=192.168.0.133,port=45000");
+        qFatal("Cannot register DBus service, server started? run dbus-launch.exe");
     }
 
     if(!connection.isConnected())
-        qDebug() << "Cannot connect to the D-Bus\n";
+        qFatal("Cannot connect to the D-Bus\n");
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));

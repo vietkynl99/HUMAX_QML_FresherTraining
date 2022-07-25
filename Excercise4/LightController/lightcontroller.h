@@ -1,7 +1,6 @@
 #ifndef LIGHTCONTROLLER_H
 #define LIGHTCONTROLLER_H
 
-
 #include <QObject>
 #include <QDebug>
 #include "light_interface.h"

@@ -23,7 +23,6 @@ int MyListModel::rowCount(const QModelIndex &parent) const
 
 QVariant MyListModel::data(const QModelIndex &index, int role) const
 {
-
     if (!hasIndex(index.row(), index.column(), index.parent()))
         return {};
     const MyListItem &item = m_list.at(index.row());
@@ -36,7 +35,6 @@ QVariant MyListModel::data(const QModelIndex &index, int role) const
 
 bool MyListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-
     if (!hasIndex(index.row(), index.column(), index.parent()) || !value.isValid())
         return false;
     MyListItem &item = m_list[index.row()];

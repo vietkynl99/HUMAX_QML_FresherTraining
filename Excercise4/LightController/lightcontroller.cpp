@@ -24,3 +24,5 @@ void LightController::turnOff()
     theLight->turnOff();
 //    qDebug() << "turn off";
 }
+
+
