@@ -3,6 +3,9 @@
 #include <QtQml>
 #include "mycontroller.h"
 
+
+MyController mycontroller;
+
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -17,7 +20,6 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("humaxdigital.com");
     app.setApplicationName("Sender Application");
 
-    MyController mycontroller;
     engine.rootContext()->setContextProperty("mycontroller", &mycontroller);
 
 
@@ -27,6 +29,9 @@ int main(int argc, char *argv[])
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
+
+        mycontroller.saveMainObject(obj);
+
     }, Qt::QueuedConnection);
     engine.load(url);
 

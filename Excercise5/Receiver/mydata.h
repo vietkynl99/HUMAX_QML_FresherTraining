@@ -18,8 +18,12 @@ public:
     MyData(QObject *parent = nullptr);
     void saveMainObject(QObject *_obj);
 
+signals:
+    void request();
+
 public slots:
     void sendData(QByteArray arr);
+    void requestSlot();
 
 private:
     QObject *mainObj;

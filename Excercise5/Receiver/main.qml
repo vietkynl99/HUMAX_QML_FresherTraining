@@ -49,6 +49,18 @@ Window {
         onSourceChanged: playing = true
     }
 
+    MyButton {
+        x: 29
+        y: 510
+        width: rectImg.width
+        height: 40
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 50
+        anchors.horizontalCenter: parent.horizontalCenter
+        text_font: 12
+        button_text: "REQUEST"
+        onButtonClicked: myData.requestSlot()
+    }
 
 
 }

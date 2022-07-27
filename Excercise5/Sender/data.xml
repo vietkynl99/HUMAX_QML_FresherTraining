@@ -1,8 +1,12 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="local.MyData">
+    <signal name="request">
+    </signal>
     <method name="sendData">
       <arg name="arr" type="ay" direction="in"/>
+    </method>
+    <method name="requestSlot">
     </method>
   </interface>
 </node>
