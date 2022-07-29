@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.1
-import CustomQmlEnum 1.0
 import CustomListModel 1.0
 
 //Window {
@@ -17,7 +16,7 @@ ApplicationWindow {
     property string color_gradient_end: "#1F3347"
     property string selectedName: ""
     property int selectedAge: 0
-    property int selectedRole: RoleType.TEAMLEADER
+    property int selectedRole: 0
     property string msgTitle: ""
     property string msgText: ""
     property var msgIcon: StandardIcon.NoIcon
@@ -27,11 +26,11 @@ ApplicationWindow {
     {
         switch(role)
         {
-        case RoleType.TEAMLEADER:
+        case 0:
             return "yellow"
-        case RoleType.DEVELOPER:
+        case 1:
             return "blue"
-        case RoleType.BA:
+        case 2:
             return "red"
         default:
             return "green"
@@ -119,7 +118,7 @@ ApplicationWindow {
             modal: true
             visible: true
             contentItem: Text {
-                text: "Are you sure you want to update data?"
+                text: "Are you sure want to update data?"
                 font.pixelSize: 16
             }
             onAccepted: {
@@ -205,7 +204,7 @@ ApplicationWindow {
                     clip: true
 
                     Text {
-                        text: name     //**
+                        text: (idx + 1).toString() + ". " + name     //**
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: 20
@@ -252,7 +251,6 @@ ApplicationWindow {
                     },
                     State {
                         name: "selected"
-                        //                        when: btnMouse.pressed
                         when: listView.currentIndex == index
                         PropertyChanges {target: rectMember; color: Qt.darker(rectTeamMembers.color, 1.6)}
                     }
@@ -267,7 +265,6 @@ ApplicationWindow {
         }
         MyListModel {
             id: myList
-            inputFile: "saveFile.json"
         }
     }
 
@@ -298,7 +295,7 @@ ApplicationWindow {
                         && editName.text !== "" && editAge.text !== "" && !isNaN(editAge.text) && editAge.text > 0)
                 {
                     msgTitle = "Update data"
-                    msgText = "Are you sure you want to update data?"
+                    msgText = "Are you sure want to update data?"
                     loader.sourceComponent = compDialogUpdate
                 }
                 else
@@ -429,8 +426,8 @@ ApplicationWindow {
         font.family: "Arial"
     }
 
-    Component.onCompleted: getSelectedData(listView.currentIndex)
-    onClosing: myList.saveListModelToFile()
+    Component.onCompleted: myList.loadListFromFile()
+    onClosing: myList.saveListToFile()
 }
 
 

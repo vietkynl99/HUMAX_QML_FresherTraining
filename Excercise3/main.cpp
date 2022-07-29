@@ -1,6 +1,5 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "Style.h"
 #include "ListModelLib.h"
 
 
@@ -14,9 +13,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-
-    //declare custom enum
-    qmlRegisterType<StyleClass>("CustomQmlEnum", 1, 0, "RoleType");
     //declare class to the QML system.
     qmlRegisterType<MyListModel>("CustomListModel",1,0,"MyListModel");
 

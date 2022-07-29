@@ -24,5 +24,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ListModelLib.h \
-    Style.h
+    ListModelLib.h

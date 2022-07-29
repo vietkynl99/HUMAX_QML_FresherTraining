@@ -60,7 +60,7 @@ Item {
         }
     ]
 
-    transitions:  Transition {
+    transitions: Transition {
             to: "*"
             reversible: true
             ColorAnimation {duration: 100}
