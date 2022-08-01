@@ -1,5 +1,5 @@
-#ifndef MYDATA_H
-#define MYDATA_H
+#ifndef MYRECEIVER_H
+#define MYRECEIVER_H
 
 #include <QObject>
 #include <QDebug>
@@ -9,24 +9,26 @@
 #include <QtDBus>
 #include <QImage>
 #include <QQmlProperty>
+#include "data_adaptor.h"
 
-class MyData : public QObject
+
+class MyReceiver : public QObject
 {
     Q_OBJECT
 
 public:
-    MyData(QObject *parent = nullptr);
-    void saveMainObject(QObject *_obj);
+    MyReceiver(QObject *parent = nullptr);
 
 signals:
     void request();
+    void getDone();
 
 public slots:
-    void sendData(QByteArray arr);
+    void getData(QByteArray arr);
     void requestSlot();
 
 private:
     QObject *mainObj;
 };
 
-#endif // MYDATA_H
+#endif // MYRECEIVER_H

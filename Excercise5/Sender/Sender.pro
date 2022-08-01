@@ -10,7 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mycontroller.cpp
+        mysender.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,7 +26,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    mycontroller.h
+    mysender.h
 
 DISTFILES += \
     data.xml

@@ -1,24 +1,24 @@
-#include "mydata.h"
+#include "myreceiver.h"
+#include "imageprovider.h"
 
-MyData::MyData(QObject *parent) : QObject(parent)
+MyReceiver::MyReceiver(QObject *parent) : QObject(parent)
 {
 
 }
 
-void MyData::saveMainObject(QObject *_obj)
+void MyReceiver::getData(QByteArray arr)
 {
-    mainObj = _obj;
+    //method 1
+    //QString resultString = QString::fromLatin1("data:;base64,") + QString::fromLatin1(arr.toBase64().data());
+
+    //method 2
+    qDebug () << "get";
+    imgProvider->image.loadFromData(arr);
+    emit getDone();
+    qDebug() << "received";
 }
 
-void MyData::sendData(QByteArray arr)
-{
-    QString resultString = QString::fromLatin1("data:image/png;base64,") + QString::fromLatin1(arr.toBase64().data());
-
-    //set property
-    QQmlProperty::write(mainObj, "img_path", resultString);
-}
-
-void MyData::requestSlot()
+void MyReceiver::requestSlot()
 {
     emit request();
 }

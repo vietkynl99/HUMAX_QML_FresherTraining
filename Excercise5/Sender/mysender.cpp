@@ -1,20 +1,20 @@
-#include "mycontroller.h"
+#include "mysender.h"
 
 
-MyController::MyController(QObject *parent) : QObject(parent)
+MySender::MySender(QObject *parent) : QObject(parent)
 {
-    theController = new local::MyData("cong.service.data", "/data",
+    receiver = new local::MyReceiver("cong.service.data", "/data",
                                       QDBusConnection::sessionBus(), this);
     //connect signal to slot
-    connect(theController, SIGNAL(request()), this, SLOT(requestSlot()));
+    connect(receiver, SIGNAL(request()), this, SLOT(requestSlot()));
 }
 
-void MyController::saveMainObject(QObject *_obj)
+void MySender::saveMainObject(QObject *_obj)
 {
     mainObj = _obj;
 }
 
-void MyController::sendData(QString filepath)
+void MySender::sendData(QString filepath)
 {
     QFile file(filepath);
     if (!file.open(QFile::ReadOnly))
@@ -25,10 +25,10 @@ void MyController::sendData(QString filepath)
     QByteArray array = file.readAll();
     file.close();
 
-    theController->sendData(array);
+    receiver->getData(array);
 }
 
-void MyController::requestSlot()
+void MySender::requestSlot()
 {
     //get img_path from property
     QString path = QQmlProperty::read(mainObj, "img_send_path").toString();

@@ -74,7 +74,7 @@ Window {
         button_text: "SEND"
         onButtonClicked: {
             if(img_send_path != "")
-                mycontroller.sendData(img_send_path)
+                mySender.sendData(img_send_path)
         }
     }
 

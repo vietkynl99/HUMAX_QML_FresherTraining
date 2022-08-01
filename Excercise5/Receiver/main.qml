@@ -42,12 +42,27 @@ Window {
         anchors.topMargin: 40
     }
 
-    AnimatedImage {
+    Image {
+        id: img
         anchors.fill: rectImg
-        source: img_path
+        source: "image://imageprovider/red"
         fillMode: Image.PreserveAspectFit
-        onSourceChanged: playing = true
+//        onSourceChanged: playing = true
+        cache: false
+
+        function reload() {
+            var oldSource = source;
+            source = "";
+            source = oldSource;
+            console.log("reload")
+        }
+        Connections {
+            target: myReceiver
+            onGetDone: img.reload();
+        }
     }
+
+
 
     MyButton {
         x: 29
@@ -59,7 +74,7 @@ Window {
         anchors.horizontalCenter: parent.horizontalCenter
         text_font: 12
         button_text: "REQUEST"
-        onButtonClicked: myData.requestSlot()
+        onButtonClicked: myReceiver.requestSlot()
     }
 
 

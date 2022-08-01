@@ -1,5 +1,5 @@
-#ifndef MYCONTROLLER_H
-#define MYCONTROLLER_H
+#ifndef MYSENDER_H
+#define MYSENDER_H
 
 
 #include <QObject>
@@ -7,11 +7,11 @@
 #include <QQmlProperty>
 #include "data_interface.h"
 
-class MyController : public QObject
+class MySender : public QObject
 {
     Q_OBJECT
 public:
-    MyController(QObject *parent = nullptr);
+    MySender(QObject *parent = nullptr);
     void saveMainObject(QObject *_obj);
 
 signals:
@@ -23,7 +23,7 @@ public slots:
 
 private:
     QObject *mainObj;
-    local::MyData *theController;
+    local::MyReceiver *receiver;
 };
 
-#endif // MYCONTROLLER_H
+#endif // MYSENDER_H

@@ -1,10 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-#include "mydata.h"
-#include "data_adaptor.h"
+#include "myreceiver.h"
+#include "imageprovider.h"
 
-MyData myData;
+
+ImageProvider *imgProvider;
 
 int main(int argc, char *argv[])
 {
@@ -17,15 +18,16 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
 
+    MyReceiver myReceiver;
     // Create new instance
-    engine.rootContext()->setContextProperty("myData", &myData);
+    engine.rootContext()->setContextProperty("myReceiver", &myReceiver);
 
     // Create interface adaptor
-    new MyDataAdaptor(&myData);
+    new MyReceiverAdaptor(&myReceiver);
     // Connect to session bus
     QDBusConnection connection = QDBusConnection::sessionBus();
 
-    connection.registerObject("/data", &myData);
+    connection.registerObject("/data", &myReceiver);
     if(!connection.registerService("cong.service.data"))
     {
         qCritical() << connection.lastError().message();
@@ -34,6 +36,9 @@ int main(int argc, char *argv[])
     if(!connection.isConnected())
         qFatal("Cannot connect to the D-Bus\n");
 
+    //image provider
+    imgProvider = new ImageProvider;
+    engine.addImageProvider(QLatin1String("imageprovider"), imgProvider);
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -41,9 +46,6 @@ int main(int argc, char *argv[])
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
-
-        myData.saveMainObject(obj);
-
     }, Qt::QueuedConnection);
     engine.load(url);
 

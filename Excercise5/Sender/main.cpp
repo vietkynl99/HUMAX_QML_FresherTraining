@@ -1,10 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-#include "mycontroller.h"
+#include "mysender.h"
 
 
-MyController mycontroller;
+MySender mySender;
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("humaxdigital.com");
     app.setApplicationName("Sender Application");
 
-    engine.rootContext()->setContextProperty("mycontroller", &mycontroller);
+    engine.rootContext()->setContextProperty("mySender", &mySender);
 
 
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
 
-        mycontroller.saveMainObject(obj);
+        mySender.saveMainObject(obj);
 
     }, Qt::QueuedConnection);
     engine.load(url);
