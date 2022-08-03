@@ -1,7 +1,5 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include "listmodellib.h"
 #include "Style.h"
 
 
@@ -15,10 +13,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    //declare custom enum
-    qmlRegisterType<StyleClass>("CustomQmlEnum", 1, 0, "ShapeType");
-    //declare class to the QML system.
-    qmlRegisterType<MyListModel>("CustomListModel",1,0,"MyListModel");
+    qmlRegisterType<StyleClass>("CustomQmlEnum", 1, 0, "EnumStatus");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -27,7 +22,6 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
 
     return app.exec();
 }

@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     // Connect to session bus
     QDBusConnection connection = QDBusConnection::sessionBus();
 
+
     connection.registerObject("/data", &myReceiver);
     if(!connection.registerService("cong.service.data"))
     {

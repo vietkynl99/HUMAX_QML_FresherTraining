@@ -45,9 +45,8 @@ Window {
     Image {
         id: img
         anchors.fill: rectImg
-        source: "image://imageprovider/red"
+        source: "image://imageprovider/"
         fillMode: Image.PreserveAspectFit
-//        onSourceChanged: playing = true
         cache: false
 
         function reload() {

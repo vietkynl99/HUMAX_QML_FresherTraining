@@ -15,16 +15,8 @@ public:
     QImage image;
 
     ImageProvider();
-
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
-
-    Flags flags() const override
-    {
-        return ForceAsynchronousImageLoading;
-    }
-
 };
-
 
 extern ImageProvider *imgProvider;
 

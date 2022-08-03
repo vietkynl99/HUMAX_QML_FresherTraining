@@ -12,7 +12,6 @@ void MyReceiver::getData(QByteArray arr)
     //QString resultString = QString::fromLatin1("data:;base64,") + QString::fromLatin1(arr.toBase64().data());
 
     //method 2
-    qDebug () << "get";
     imgProvider->image.loadFromData(arr);
     emit getDone();
     qDebug() << "received";

@@ -1,6 +1,7 @@
 #ifndef LISTMODELLIB_H
 #define LISTMODELLIB_H
 
+
 /*
  * https://stackoverflow.com/questions/44777999/manipulate-data-in-a-qabstractlistmodel-from-a-qml-listview
  * https://stackoverflow.com/questions/55695104/how-can-i-show-a-single-item-of-a-qabstractlistmodel-and-update-the-gui-when-dat
@@ -13,38 +14,28 @@
 #include <QQmlEngine>
 #include <QObject>
 #include <QAbstractListModel>
-#include <QFile>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
-
-#define FILENAME "saveFile.json"
 
 struct MyListItem {
-    int idx;
-    QString name;
-    int role;
-    int age;
+    int bType;
+    QString bColor;
+    int bValue;
 };
 
 class MyListModel: public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 private:
     QList<MyListItem> m_list;
 
-    /**
-     * @brief sortItem: sort by Role: Team Leader > Developer > BA > Tester
-     */
-    void sortItem();
+    int m_count;
 
 public:
     enum MyRoles {
-        IdxRole = Qt::UserRole + 1,
-        NameRole,
-        PositionRole,
-        AgeRole
+        TypeRole = Qt::UserRole + 1,
+        ColorRole,
+        ValueRole
     };
 
     MyListModel(QObject *parent = nullptr): QAbstractListModel(parent){}
@@ -55,6 +46,9 @@ public:
 
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
+    int count() const;
+    void setCount(int newCount);
+
 public slots:
     /**
      * @brief addItem: add new item
@@ -62,41 +56,15 @@ public slots:
      * @param role
      * @param age
      */
-    void addItem(QString const name, const int role, const int age);
+    void addItem(const int bType, const QString bColor, const int bValue);
 
     /**
-     * @brief removeItem: remove item by index
-     * @param index
+     * @brief clearList: clear list
      */
-    void removeItem(const int &index);
+    void clearList();
 
-    /**
-     * @brief get: get data in list
-     * @param index
-     * @return
-     */
-    QVariant getItem(const int index);
-
-    /**
-     * @brief updateItem: update new item data
-     * @param name
-     * @param role
-     * @param age
-     * @param index
-     * @return
-     */
-    void updateItem(const int index, const QString name, const int role, const int age);
-
-
-    /**
-     * @brief saveListModelToFile: save list to json file
-     */
-    void saveListToFile();
-
-    /**
-     * @brief loadListModelFromFile: load list from json file
-     */
-    void loadListFromFile();
+signals:
+    void countChanged();
 
 protected:
     QHash<int, QByteArray> roleNames() const override;

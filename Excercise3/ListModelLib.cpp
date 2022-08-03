@@ -14,23 +14,16 @@ QVariant MyListModel::data(const QModelIndex &index, int role) const
         return {};
     }
     const MyListItem &item = m_list.at(index.row());
-    if (role == IdxRole)
-    {
+    switch (role) {
+    case IdxRole:
         return item.idx;
-    }
-    if (role == NameRole)
-    {
+    case NameRole:
         return item.name;
-    }
-    if (role == PositionRole)
-    {
+    case PositionRole:
         return item.role;
-    }
-    if (role == AgeRole)
-    {
+    case AgeRole:
         return item.age;
     }
-
     return {};
 }
 
@@ -39,24 +32,21 @@ bool MyListModel::setData(const QModelIndex &index, const QVariant &value, int r
     if (!hasIndex(index.row(), index.column(), index.parent()) || !value.isValid())
         return false;
     MyListItem &item = m_list[index.row()];
-    if(role == IdxRole)
+    switch (role)
     {
+    case IdxRole:
         item.idx = value.toInt();
-    }
-    if (role == NameRole)
-    {
+        break;
+    case NameRole:
         item.name = value.toString();
-    }
-    else if (role == PositionRole)
-    {
+        break;
+    case PositionRole:
         item.role = value.toInt();
-    }
-    else if (role == AgeRole)
-    {
+        break;
+    case AgeRole:
         item.age = value.toInt();
-    }
-    else
-    {
+        break;
+    default:
         return false;
     }
     emit dataChanged(index, index, { role } );
@@ -74,7 +64,7 @@ void MyListModel::addItem(QString const name, const int role, const int age)
 void MyListModel::removeItem(const int &index)
 {
     beginRemoveRows(QModelIndex(),index, index);
-    m_list.remove(index);
+    m_list.removeAt(index);
     endRemoveRows();
 }
 
@@ -168,9 +158,9 @@ void MyListModel::loadListFromFile()
 
     if(rootObject.contains("listModel") && rootObject["listModel"].isArray())
     {
-
         auto listJsonArray = rootObject["listModel"].toArray();
-        QVector<MyListItem> newList;
+        beginResetModel();
+        m_list.clear();
         for(int index =0; index < listJsonArray.size(); index++)
         {
             auto jsonItem = listJsonArray[index].toObject();
@@ -179,10 +169,8 @@ void MyListModel::loadListFromFile()
             newItem.name = jsonItem["name"].toString();
             newItem.role = jsonItem["role"].toInt();
             newItem.age = jsonItem["age"].toInt();
-            newList.append(newItem);
+            m_list.append(newItem);
         }
-        beginResetModel();
-        m_list = newList;
         endResetModel();
         loadDoc.close();
     }

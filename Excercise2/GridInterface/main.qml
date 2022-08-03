@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Shapes 1.3
 import CustomQmlEnum 1.0
+import CustomListModel 1.0
 
 Window {
     id: mainWindow
@@ -47,7 +48,7 @@ Window {
             id: flickable
             anchors.fill: parent
             contentWidth: boxgrid.width
-            contentHeight: 123*Math.ceil(listModelShape.count/4)
+            contentHeight: 123*Math.ceil(myList.count/4)
             clip: true
             bottomMargin: 50
 
@@ -63,7 +64,7 @@ Window {
                     PropertyAnimation { properties: "x,y"; duration: 100}
                 }
                 Repeater {
-                    model: listModelShape
+                    model: myList
                     delegate: MyBoxes {
                         boxType: bType
                         boxColor: bColor
@@ -72,16 +73,11 @@ Window {
                 }
             }
 
-            ListModel {
-                id: listModelShape
-                objectName: "listShape"
-//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
-//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
-//                ListElement { bType: 0; bColor: "blue"; bValue: 52}
-                function addNewItem(itemVar)
-                {
-                    append({ bType: itemVar.type, bColor: itemVar.color, bValue: itemVar.value})
-                }
+//            ListModel {
+//                id: myList
+//            }
+            MyListModel {
+                id: myList
             }
         }
     }
@@ -141,9 +137,9 @@ Window {
         button_text: "Add by Cpp"
         text_font: 16
         onButtonClicked: {
-            CppContext.callReset()
-            if(listModelShape.count > 16)
-                flickable.contentY = 123*Math.ceil((listModelShape.count - 16)/4) + 5;
+            myList.addItem(selectedBoxType, selectedBoxColor, selectedBoxValue)
+            if(myList.count > 16)
+                flickable.contentY = 123*Math.ceil((myList.count - 16)/4) + 5;
             else
                 flickable.contentY = 0
         }
@@ -157,10 +153,9 @@ Window {
         button_text: "Add by Qml"
         text_font: 16
         onButtonClicked: {
-            var itemVar = { "type": selectedBoxType, "color": selectedBoxColor, "value": selectedBoxValue}
-            listModelShape.addNewItem(itemVar)
-            if(listModelShape.count > 16)
-                flickable.contentY = 123*Math.ceil((listModelShape.count - 16)/4) + 5;
+//            myList.append({ bType: selectedBoxType, bColor: selectedBoxColor, bValue: selectedBoxValue})
+            if(myList.count > 16)
+                flickable.contentY = 123*Math.ceil((myList.count - 16)/4) + 5;
             else
                 flickable.contentY = 0
         }
@@ -173,7 +168,10 @@ Window {
         height: 52
         button_text: "Clear"
         text_font: 16
-        onButtonClicked: listModelShape.clear()
+        onButtonClicked: {
+            myList.clearList()
+            listModelShape.clear()
+        }
     }
 
     //load sample shape

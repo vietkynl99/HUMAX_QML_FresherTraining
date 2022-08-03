@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>image/background.png</file>
+        <file>image/bird.png</file>
+        <file>image/pipe.png</file>
+        <file>PipeMap.qml</file>
+        <file>MyButton.qml</file>
+    </qresource>
+</RCC>
