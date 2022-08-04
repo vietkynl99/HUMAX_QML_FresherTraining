@@ -25,7 +25,7 @@ signals:
 
 public slots:
     void getData(QByteArray arr);
-    void requestSlot();
+    void sendRequest();
 
 private:
     QObject *mainObj;

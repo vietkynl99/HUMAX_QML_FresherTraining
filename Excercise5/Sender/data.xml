@@ -6,7 +6,7 @@
     <method name="getData">
       <arg name="arr" type="ay" direction="in"/>
     </method>
-    <method name="requestSlot">
+    <method name="sendRequest">
     </method>
   </interface>
 </node>

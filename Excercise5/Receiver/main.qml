@@ -73,7 +73,7 @@ Window {
         anchors.horizontalCenter: parent.horizontalCenter
         text_font: 12
         button_text: "REQUEST"
-        onButtonClicked: myReceiver.requestSlot()
+        onButtonClicked: myReceiver.sendRequest()
     }
 
 

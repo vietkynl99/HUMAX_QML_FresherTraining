@@ -1,5 +1,5 @@
 # QML_FresherTraining
-
+![](./demo/flappybird.gif)
 ## Excercise 1: Get started, get familiar with C++ and QML
     QML Component and properties
     QML signals and Handler
@@ -23,3 +23,5 @@
     Workable library: https://lists.qt-project.org/pipermail/development/2014-December/019502.html
 ## Excercise 5: QtDbus - QDBusMessage
     The current display image is transfer to receiver and displayed
+## Make some mini games
+    Flappy Bird

@@ -108,170 +108,178 @@ Window {
         anchors.centerIn: parent
         scale: Math.min(root.width/width, root.height/height)
         clip: true
-        focus: true
 
         Image {
             anchors.fill: parent
             source: "image/background.png"
         }
 
-        ListModel {
-            id: myList
-            ListElement {alt: 640; dis: 150}
-            ListElement {alt: 350; dis: 150}
-            ListElement {alt: 250; dis: 150}
-            ListElement {alt: 280; dis: 150}
-            ListElement {alt: 640; dis: 150}
-            ListElement {alt: 350; dis: 150}
-        }
-
-        Loader {
-            id: loaderId
+        Item {
+            id: mainpage
             anchors.fill: parent
-            sourceComponent: comId
-            visible: game_status != EnumStatus.HOME
-        }
 
-        Component{
-            id: comId
-            Repeater {
-                id: repeaterColume
-                model: myList
-                PipeMap {
-                    x: index * pipe_distance
-                    altitude: alt
-                    distance: dis
+            ListModel {
+                id: myList
+                ListElement {alt: 640; dis: 150}
+                ListElement {alt: 350; dis: 150}
+                ListElement {alt: 250; dis: 150}
+                ListElement {alt: 280; dis: 150}
+                ListElement {alt: 640; dis: 150}
+                ListElement {alt: 350; dis: 150}
+            }
 
-                    NumberAnimation on x {
-                        id: xAnimmm
-                        from: index * pipe_distance
-                        to: (-myList.count + index + 2) * pipe_distance
-                        loops: Animation.Infinite
-                        duration: game_speed*Math.abs(from - to)
-                        running: game_status == EnumStatus.RUNNING
+            Loader {
+                id: loaderId
+                anchors.fill: parent
+                sourceComponent: comId
+            }
+
+            Component {
+                id: comId
+                Repeater {
+                    model: myList
+                    PipeMap {
+                        x: index * pipe_distance
+                        altitude: alt
+                        distance: dis
+
+                        NumberAnimation on x {
+                            from: index * pipe_distance
+                            to: (-myList.count + index + 2) * pipe_distance
+                            loops: Animation.Infinite
+                            duration: game_speed*Math.abs(from - to)
+                            running: game_status == EnumStatus.RUNNING
+                        }
+                        onXChanged: {
+                            if(checkInvalid(bird.x + delta, bird.y+delta) || checkInvalid(bird.x + bird.width - delta, bird.y+delta) ||
+                                    checkInvalid(bird.x + delta, bird.y + bird.height - delta) || checkInvalid(bird.x + bird.width - delta, bird.y + bird.height - delta))
+                            {
+                                gameOver()
+                            }
+                            if(x>-pipe_distance - 50 && x<-pipe_distance && index < myList.count - 2)
+                            {
+                                myList.set(index, {"alt":Math.random()*400+150, "dis": pipe_distance_space})
+                            }
+                            if(index >= myList.count - 2)
+                            {
+                                myList.set(index, {"alt":myList.get(index - myList.count + 2).alt, "dis": pipe_distance_space})
+                            }
+                        }
                     }
-                    onXChanged: {
-                        if(checkInvalid(bird.x + delta, bird.y+delta) || checkInvalid(bird.x + bird.width - delta, bird.y+delta) ||
-                                checkInvalid(bird.x + delta, bird.y + bird.height - delta) || checkInvalid(bird.x + bird.width - delta, bird.y + bird.height - delta))
-                        {
-                            gameOver()
-                        }
-                        if(x>-pipe_distance - 50 && x<-pipe_distance && index < myList.count - 2)
-                        {
-                            myList.set(index, {"alt":Math.random()*400+150, "dis": pipe_distance_space})
-                        }
-                        if(index >= myList.count - 2)
-                        {
-                            myList.set(index, {"alt":myList.get(index - myList.count + 2).alt, "dis": pipe_distance_space})
-                        }
-                    }
+
                 }
             }
-        }
 
-        Image {
-            id: bird
-            x: width/4
-            y: level
-            width: 55
-            height: 35
-            fillMode: Image.Stretch
-            source: "image/bird.png"
-            visible: game_status !== EnumStatus.HOME
-        }
-        Text {
-            id: txtScore
-            x: 5
-            y: 3
-            color: "white"
-            text: showInfo()
-            font.bold: true
-            font.pointSize: 12
-            visible: game_status !== EnumStatus.HOME
-        }
-        Text {
-            id: txtStatus
-            color: "white"
-            text: "START"
-            font.bold: true
-            font.pointSize: 24
-            anchors.centerIn: parent
-            visible: false
+            Image {
+                id: bird
+                x: width/4
+                y: level
+                width: 55
+                height: 35
+                fillMode: Image.Stretch
+                source: "image/bird.png"
+            }
+            Text {
+                id: txtScore
+                x: 5
+                y: 3
+                color: "white"
+                text: showInfo()
+                font.bold: true
+                font.pointSize: 12
+                visible: game_status !== EnumStatus.HOME
+            }
+            Text {
+                id: txtStatus
+                color: "white"
+                text: "START"
+                font.bold: true
+                font.pointSize: 24
+                anchors.centerIn: parent
+                visible: false
 
-            states: [
-                State {
-                    name: "start"
-                    when: game_status === EnumStatus.START
-                    PropertyChanges {target: txtStatus; text: "START"; visible:true}
-                },
-                State {
-                    name: "running"
-                    when: game_status === EnumStatus.RUNNING
-                    PropertyChanges {target: txtStatus; visible:false}
-                },
-                State {
-                    name: "gameover"
-                    when: game_status === EnumStatus.STOP
-                    PropertyChanges {target: txtStatus; text: "GAME OVER"; visible:true}
-                }
-            ]
-        }
+                states: [
+                    State {
+                        name: "start"
+                        when: game_status === EnumStatus.START
+                        PropertyChanges {target: txtStatus; text: "START"; visible:true}
+                    },
+                    State {
+                        name: "running"
+                        when: game_status === EnumStatus.RUNNING
+                        PropertyChanges {target: txtStatus; visible:false}
+                    },
+                    State {
+                        name: "gameover"
+                        when: game_status === EnumStatus.STOP
+                        PropertyChanges {target: txtStatus; text: "GAME OVER"; visible:true}
+                    }
+                ]
+            }
 
-        Keys.onPressed: {
-            if(event.key === Qt.Key_Space || event.key === Qt.Key_Up)
-                processHandler()
-        }
-        MouseArea {
-            anchors.fill: parent
-            onPressed: processHandler()
-        }
+            states: State {
+                when: game_status == EnumStatus.HOME
+                PropertyChanges {target: mainpage; opacity: 0}
+            }
+            transitions: Transition {
+                to: ""
+                PropertyAnimation {property: "opacity"; duration: 300}
+            }
 
-        Timer {
-            id: timer
-            interval: 25
-            repeat: true
-            running: game_status == EnumStatus.RUNNING
-            onTriggered: {
-                score++
-                t++;
-                var y = level0 - vt*t - at*t*t
-                if( y < -bird.height)
-                {
-                    level = -bird.height
+            MouseArea {
+                anchors.fill: parent
+                onPressed: processHandler()
+            }
+
+            Timer {
+                id: timer
+                interval: 25
+                repeat: true
+                running: game_status == EnumStatus.RUNNING
+                onTriggered: {
+                    score++
+                    t++;
+                    var y = level0 - vt*t - at*t*t
+                    if( y < -bird.height)
+                    {
+                        level = -bird.height
+                    }
+                    else if( y > root.height)
+                    {
+                        level = root.height
+                        gameOver()
+                    }
+                    else
+                    {
+                        level = y
+                    }
+                    bird.rotation = -7*(vt+at*t)
                 }
-                else if( y > root.height)
-                {
-                    level = root.height
-                    gameOver()
-                }
-                else
-                {
-                    level = y
-                }
-                bird.rotation = -7*(vt+at*t)
+            }
+
+
+            MyButton {
+                x: 29
+                width: 200
+                height: 40
+                anchors.top: parent.top
+                text_color: "white"
+                border_width: 1
+                background_color: "#55A901"
+                anchors.topMargin: 400
+                anchors.horizontalCenter: parent.horizontalCenter
+                text_font: 14
+                button_text: "PLAY AGAIN"
+                visible: game_status == EnumStatus.STOP
+                onButtonClicked: game_status = EnumStatus.HOME
             }
         }
-
-
-        MyButton {
-            x: 29
-            width: 200
-            height: 40
-            anchors.top: parent.top
-            text_color: "white"
-            border_width: 1
-            background_color: "#55A901"
-            anchors.topMargin: 400
-            anchors.horizontalCenter: parent.horizontalCenter
-            text_font: 14
-            button_text: "PLAY AGAIN"
-            visible: game_status == EnumStatus.STOP
-            onButtonClicked: game_status = EnumStatus.HOME
-        }
-
 
         Item {
+            id: homepage
             anchors.fill: parent
+            visible: game_status == EnumStatus.HOME
+
             MyButton {
                 x: 29
                 width: 200
@@ -290,7 +298,6 @@ Window {
                     gameReset()
                 }
             }
-
             MyButton {
                 x: 29
                 width: 200
@@ -309,7 +316,6 @@ Window {
                     gameReset()
                 }
             }
-
             MyButton {
                 x: 29
                 width: 200
@@ -328,21 +334,19 @@ Window {
                     gameReset()
                 }
             }
-            visible: game_status == EnumStatus.HOME
-        }
 
-        Text {
-            color: "#ffffff"
-            text: qsTr("FLAPPY BIRD")
-            anchors.top: parent.top
-            font.pixelSize: 34
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.italic: false
-            anchors.topMargin: 120
-            font.bold: true
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: game_status == EnumStatus.HOME
+            Text {
+                color: "#ffffff"
+                text: qsTr("FLAPPY BIRD")
+                anchors.top: parent.top
+                font.pixelSize: 34
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.italic: false
+                anchors.topMargin: 120
+                font.bold: true
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
         Text {
             color: "#ffffff"

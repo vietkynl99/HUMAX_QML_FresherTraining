@@ -17,7 +17,7 @@ void MyReceiver::getData(QByteArray arr)
     qDebug() << "received";
 }
 
-void MyReceiver::requestSlot()
+void MyReceiver::sendRequest()
 {
     emit request();
 }
