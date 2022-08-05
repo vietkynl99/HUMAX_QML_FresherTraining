@@ -73,12 +73,12 @@ Window {
                 }
             }
 
-//            ListModel {
-//                id: myList
-//            }
-            MyListModel {
+            ListModel {
                 id: myList
             }
+//            MyListModel {
+//                id: myList
+//            }
         }
     }
 

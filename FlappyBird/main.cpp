@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QIcon>
 #include "Style.h"
 
 
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     qmlRegisterType<StyleClass>("CustomQmlEnum", 1, 0, "EnumStatus");
+    app.setWindowIcon(QIcon(":/image/flappy.png"));
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

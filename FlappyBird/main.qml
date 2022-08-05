@@ -14,13 +14,15 @@ Window {
     property int pipe_distance: 250     //distance between 2 pipe
     property int game_status: EnumStatus.HOME
     property int game_level: 0      //0:easy   1:medium    2:hard
-    property int game_speed: 7
+    property int game_speed: 7000
+    property real game_speed_dec: 0
     property int level0: 330
     property int level: level0
     property int t: 0
     property int vt: 10
     property real at: -0.5
     property int delta: 3
+    property string cheat_code: ""
 
     function processHandler()
     {
@@ -45,6 +47,7 @@ Window {
     }
     function gameReset()
     {
+        cheat_code=""
         resetInitialValue()
         game_status= EnumStatus.START
         loaderId.sourceComponent = undefined
@@ -57,35 +60,35 @@ Window {
         case 0:
             pipe_distance_space = 200
             pipe_distance = 280
-            game_speed = 6
+            game_speed = 6000
             vt = 10
             at = -0.5
             break
         case 1:
             pipe_distance_space = 150
             pipe_distance = 250
-            game_speed = 5
+            game_speed = 5000
             vt = 12
             at = -0.7
             break
         default:
             pipe_distance_space = 150
             pipe_distance = 250
-            game_speed = 4
+            game_speed = 4000
             vt = 14
             at = -1
             break
         }
-
+        game_speed_dec = 0
         t = 0
         score = 0
-        level0 = item.height/2
+        level0 = mainItem.height/2
         level = level0
         bird.rotation = 0
-        myList.set(0, {"alt": item.height, "dis": item.height})
-        myList.set(1, {"alt": item.height*0.6, "dis": pipe_distance_space})
+        myList.set(0, {"alt": mainItem.height, "dis": mainItem.height})
+        myList.set(1, {"alt": mainItem.height*0.6, "dis": pipe_distance_space})
         for(var i=2; i<myList.count-2; i++)
-            myList.set(i, {"alt": Math.random()*item.height*0.63+item.height*0.23, "dis": pipe_distance_space})
+            myList.set(i, {"alt": Math.random()*mainItem.height*0.63+mainItem.height*0.23, "dis": pipe_distance_space})
     }
     function showInfo()
     {
@@ -102,7 +105,7 @@ Window {
 
 
     Item {
-        id: item
+        id: mainItem
         width: 360
         height: 640
         anchors.centerIn: parent
@@ -117,6 +120,8 @@ Window {
         Item {
             id: mainpage
             anchors.fill: parent
+            clip: true
+            focus: true
 
             ListModel {
                 id: myList
@@ -147,22 +152,23 @@ Window {
                             from: index * pipe_distance
                             to: (-myList.count + index + 2) * pipe_distance
                             loops: Animation.Infinite
-                            duration: game_speed*Math.abs(from - to)
+                            duration: game_speed //- game_speed_dec
                             running: game_status == EnumStatus.RUNNING
                         }
                         onXChanged: {
                             if(checkInvalid(bird.x + delta, bird.y+delta) || checkInvalid(bird.x + bird.width - delta, bird.y+delta) ||
                                     checkInvalid(bird.x + delta, bird.y + bird.height - delta) || checkInvalid(bird.x + bird.width - delta, bird.y + bird.height - delta))
                             {
-                                gameOver()
+                                if(cheat_code !== "12123434")
+                                    gameOver()
                             }
                             if(x>-pipe_distance - 50 && x<-pipe_distance && index < myList.count - 2)
                             {
-                                myList.set(index, {"alt":Math.random()*400+150, "dis": pipe_distance_space})
+                                myList.set(index, {"alt": Math.random()*400+150, "dis": pipe_distance_space})
                             }
                             if(index >= myList.count - 2)
                             {
-                                myList.set(index, {"alt":myList.get(index - myList.count + 2).alt, "dis": pipe_distance_space})
+                                myList.set(index, {"alt": myList.get(index - myList.count + 2).alt, "dis": pipe_distance_space})
                             }
                         }
                     }
@@ -212,7 +218,7 @@ Window {
                     State {
                         name: "gameover"
                         when: game_status === EnumStatus.STOP
-                        PropertyChanges {target: txtStatus; text: "GAME OVER"; visible:true}
+                        PropertyChanges {target: txtStatus; text: "GÀ"; visible:true}
                     }
                 ]
             }
@@ -224,6 +230,11 @@ Window {
             transitions: Transition {
                 to: ""
                 PropertyAnimation {property: "opacity"; duration: 300}
+            }
+
+            Keys.onPressed: {
+                if(cheat_code.length<8)
+                    cheat_code += String.fromCharCode(event.key).toUpperCase()
             }
 
             MouseArea {
@@ -254,6 +265,12 @@ Window {
                         level = y
                     }
                     bird.rotation = -7*(vt+at*t)
+
+
+                    //                    if(game_speed_dec<4000)
+                    //                    {
+                    //                        game_speed_dec = score*5;
+                    //                    }
                 }
             }
 
@@ -336,6 +353,7 @@ Window {
             }
 
             Text {
+                id: txtGame
                 color: "#ffffff"
                 text: qsTr("FLAPPY BIRD")
                 anchors.top: parent.top
@@ -346,6 +364,38 @@ Window {
                 anchors.topMargin: 120
                 font.bold: true
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                SequentialAnimation {
+                    running: true
+                    loops: Animation.Infinite
+
+                    PauseAnimation {duration: 500}
+                    NumberAnimation {
+                        target: txtGame
+                        property: "rotation"
+                        alwaysRunToEnd: true
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                        to: 5
+                    }
+                    NumberAnimation {
+                        target: txtGame
+                        property: "rotation"
+                        alwaysRunToEnd: true
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                        to: -5
+                    }
+                    NumberAnimation {
+                        target: txtGame
+                        property: "rotation"
+                        alwaysRunToEnd: true
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                        to: 0
+                    }
+                    PauseAnimation {duration: 3000}
+                }
             }
         }
         Text {
